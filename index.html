@@ -3,24 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BG — 2D Halftone Wave</title>
+<title>levpr1c</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
 #c { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: block; }
-#t {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; mix-blend-mode: difference;
-  font: 700 clamp(32px, 10vw, 120px)/1 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
-  pointer-events: none; user-select: none; z-index: 1;
-  letter-spacing: 0.15em;
+#p {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: min(1040px, 95vw); max-height: 90vh; overflow-y: auto;
+  background: rgba(32,29,29,0.55);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 36px 36px 28px; z-index: 1;
 }
+#p::-webkit-scrollbar { width: 4px; }
+#p::-webkit-scrollbar-track { background: transparent; }
+#p::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+#title {
+  font: 500 22px/1.5 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  color: rgba(255,255,255,0.88);
+  letter-spacing: 0.08em; margin-bottom: 20px;
+}
+#cols {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+}
+.r.sh {
+  font: 500 12px/1 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.r.sh .b { color: rgba(255,255,255,0.2); }
+.r {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 24px; padding: 3px 0;
+  font: 400 14px/1 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  color: rgba(255,255,255,0.55);
+}
+.r .b { color: rgba(255,255,255,0.28); width: 16px; height: 16px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.r .b svg { display: block; }
+.hr { height: 1px; background: rgba(255,255,255,0.05); margin: 20px 0; }
+.r a {
+  color: rgba(255,255,255,0.72); text-decoration: none;
+  transition: color .15s;
+}
+.r a:hover { color: rgba(255,255,255,0.95); }
+.r .lb {
+  color: rgba(255,255,255,0.45); width: 80px; flex-shrink: 0;
+}
+.r .m { color: rgba(255,255,255,0.3); font-size: 12.5px; white-space: nowrap; }
 </style>
 </head>
 <body>
 <div id="c"></div>
-<div id="t">levpr1c</div>
+<div id="p">
+  <div id="title">levpr1c</div>
+  <div class="hr"></div>
+  <div id="cols">
+    <div class="col">
+      <div class="r sh"><span class="b"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"><path d="M4 2H2v12h2"/><path d="M12 2h2v12h-2"/><path d="M6 8h4M8 6v4"/></svg></span><span>social</span></div>
+      <div class="r"><span class="b"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.632.55v22.9H2.28V24H0V0h2.28v.55zm7.043 7.26v1.157h.033c.309-.443.683-.784 1.117-1.024.433-.245.936-.365 1.5-.365.54 0 1.033.107 1.481.314.448.208.785.582 1.02 1.108.254-.374.6-.706 1.034-.992.434-.287.95-.43 1.546-.43.453 0 .872.056 1.26.167.388.11.716.286.993.53.276.245.489.559.646.951.152.392.23.863.23 1.417v5.728h-2.349V11.52c0-.286-.01-.559-.032-.812a1.755 1.755 0 0 0-.18-.66 1.106 1.106 0 0 0-.438-.448c-.194-.11-.457-.166-.785-.166-.332 0-.6.064-.803.189a1.38 1.38 0 0 0-.48.499 1.946 1.946 0 0 0-.231.696 5.56 5.56 0 0 0-.06.785v4.768h-2.35v-4.8c0-.254-.004-.503-.018-.752a2.074 2.074 0 0 0-.143-.688 1.052 1.052 0 0 0-.415-.503c-.194-.125-.476-.19-.854-.19-.111 0-.259.024-.439.074-.18.051-.36.143-.53.282-.171.138-.319.337-.439.595-.12.259-.18.6-.18 1.02v4.966H5.46V7.81zm15.693 15.64V.55H21.72V0H24v24h-2.28v-.55z"/></svg></span><span class="lb">matrix</span><a href="https://matrix.to/#/@levpr1c:bladerunn.in" target="_blank">@levpr1c:bladerunn.in</a><span class="m">/</span><a href="https://matrix.to/#/@levpr1c:unredacted.org" target="_blank">@levpr1c:unredacted.org</a></div>
+      <div class="r"><span class="b"><svg width="16" height="16" viewBox="0 0 170 200" fill="currentColor" preserveAspectRatio="xMidYMid meet"><g transform="translate(105.17188,-24.209374)"><path d="m-63.103126,202.75245c-5.342318,-0.5063 -11.349554,-2.24175 -16.404167,-4.73907-13.099829,-6.47219 -22.234137,-18.62706 -25.062327,-33.35001l-0.60226,-3.13524v-48.02188-48.02187l0.60226,-3.135233c3.71774,-19.353783 18.183728,-33.819768 37.537511,-37.53751l3.135233,-0.602258h48.021879 48.02187l3.13524,0.602258c19.35378,3.717742 33.81977,18.183727 37.53751,37.53751l0.60226,3.135233v48.02187 48.02188l-0.60226,3.13524c-3.7171,19.35041 -17.96881,33.65299 -37.39799,37.53147l-3.01017,0.60089-47.22813,0.0285c-25.975468,0.0157 -47.704375,-0.0166 -48.286459,-0.0718zM-6.7468767,173.0069c16.34652,-1.66846 29.2383197,-8.43762 37.8585097,-19.87855 7.09028,-9.41041 10.6905,-20.33792 11.46434,-34.79699 0.73331,-13.70182 -1.46692,-26.182383 -6.35109,-36.025913 -6.81189,-13.728595 -18.13852,-22.778793 -33.3144597,-26.618868 -8.42488,-2.131806 -20.2360103,-2.704643 -29.5203653,-1.431727 -24.570172,3.368649 -41.045152,18.864621 -45.717186,43.000495 -1.134375,5.860213 -1.359331,8.549593 -1.359331,16.250903 0,7.89276 0.230483,10.53108 1.456176,16.66876 3.408138,17.06627 13.300602,30.39294 27.729531,37.35592 10.224987,4.93428 23.787698,6.90147 37.7538753,5.47597z m-12.4354103,-25.218c-7.727142,-1.31988 -12.246895,-5.0819 -15.292426,-12.72866 -1.039453,-2.60987 -2.099083,-6.59926 -2.551703,-9.60688 -0.925504,-6.14991 -0.872384,-17.95346 0.107945,-23.98646 1.333354,-8.205533 3.970599,-14.078573 8.049855,-17.926743 3.42328,-3.229349 7.143756,-4.492628 13.258199,-4.501799 4.16904,-0.0062 6.5112903,0.438661 9.4910403,1.802834 6.24602003,2.859525 10.50308,10.484245 12.10717,21.684858 0.682,4.76211 0.6939,18.35949 0.02,22.88646 -1.188,7.98078 -3.92295,14.17199 -7.87796,17.83363 -3.96042,3.66665 -11.2472103,5.57872 -17.3121503,4.54276z"/></g></svg></span><span class="lb">openvk</span><a href="https://openvk.org/levpr1c" target="_blank">openvk.org/levpr1c</a></div>
+      <div class="r"><span class="b"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></span><span class="lb">github</span><a href="https://github.com/levpr1c" target="_blank">github.com/levpr1c</a></div>
+      <div class="r"><span class="b"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></span><span class="lb">telegram</span><a href="https://t.me/yagunwest" target="_blank">t.me/yagunwest</a><span class="m">/</span><a href="https://t.me/furryfoxv1" target="_blank">t.me/furryfoxv1</a></div>
+      <div class="r"><span class="b"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M13.545 2.907a13.227 13.227 0 00-3.257-1.011.05.05 0 00-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 00-3.658 0 8.258 8.258 0 00-.412-.833.051.051 0 00-.052-.025 13.2 13.2 0 00-3.257 1.011.05.05 0 00-.021.018C.356 6.354-.213 9.725.066 13.056a.052.052 0 00.02.035 13.27 13.27 0 003.995 2.02.05.05 0 00.054-.02c.308-.42.582-.865.82-1.33a.05.05 0 00-.027-.07 8.72 8.72 0 01-1.252-.597.05.05 0 01-.012-.08c.084-.062.168-.128.248-.194a.05.05 0 01.05-.01c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 01.053.01c.08.066.164.132.248.194a.05.05 0 01-.012.08 8.72 8.72 0 01-1.252.597.05.05 0 00-.027.07c.239.465.512.91.82 1.33a.05.05 0 00.054.02 13.27 13.27 0 003.995-2.02.05.05 0 00.02-.035c.33-3.77-.467-7.113-1.962-10.131a.048.048 0 00-.019-.018zm-8.24 8.092c-.79 0-1.438-.726-1.438-1.618 0-.892.637-1.618 1.438-1.618.801 0 1.45.726 1.438 1.618 0 .892-.637 1.618-1.438 1.618zm5.39 0c-.79 0-1.438-.726-1.438-1.618 0-.892.637-1.618 1.438-1.618.801 0 1.45.726 1.438 1.618 0 .892-.637 1.618-1.438 1.618z"/></svg></span><span class="lb">discord</span><span>@levpric001</span></div>
+      <div class="r"><span class="b"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0q-.934 0-1.83.139l.17 1.111a11 11 0 0 1 3.32 0l.172-1.111A12 12 0 0 0 12 0M9.152.34A12 12 0 0 0 5.77 1.742l.584.961a10.8 10.8 0 0 1 3.066-1.27zm5.696 0-.268 1.094a10.8 10.8 0 0 1 3.066 1.27l.584-.962A12 12 0 0 0 14.848.34M12 2.25a9.75 9.75 0 0 0-8.539 14.459c.074.134.1.292.064.441l-1.013 4.338 4.338-1.013a.62.62 0 0 1 .441.064A9.7 9.7 0 0 0 12 21.75c5.385 0 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25m-7.092.068a12 12 0 0 0-2.59 2.59l.909.664a11 11 0 0 1 2.345-2.345zm14.184 0-.664.909a11 11 0 0 1 2.345 2.345l.909-.664a12 12 0 0 0-2.59-2.59M1.742 5.77A12 12 0 0 0 .34 9.152l1.094.268a10.8 10.8 0 0 1 1.269-3.066zm20.516 0-.961.584a10.8 10.8 0 0 1 1.27 3.066l1.093-.268a12 12 0 0 0-1.402-3.383M.138 10.168A12 12 0 0 0 0 12q0 .934.139 1.83l1.111-.17A11 11 0 0 1 1.125 12q0-.848.125-1.66zm23.723.002-1.111.17q.125.812.125 1.66c0 .848-.042 1.12-.125 1.66l1.111.172a12.1 12.1 0 0 0 0-3.662M1.434 14.58l-1.094.268a12 12 0 0 0 .96 2.591l-.265 1.14 1.096.255.36-1.539-.188-.365a10.8 10.8 0 0 1-.87-2.35m21.133 0a10.8 10.8 0 0 1-1.27 3.067l.962.584a12 12 0 0 0 1.402-3.383zm-1.793 3.848a11 11 0 0 1-2.345 2.345l.664.909a12 12 0 0 0 2.59-2.59zm-19.959 1.1L.357 21.48a1.8 1.8 0 0 0 2.162 2.161l1.954-.455-.256-1.095-1.953.455a.675.675 0 0 1-.81-.81l.454-1.954zm16.832 1.769a10.8 10.8 0 0 1-3.066 1.27l.268 1.093a12 12 0 0 0 3.382-1.402zm-10.94.213-1.54.36.256 1.095 1.139-.266c.814.415 1.683.74 2.591.961l.268-1.094a10.8 10.8 0 0 1-2.35-.869zm3.634 1.24-.172 1.111a12.1 12.1 0 0 0 3.662 0l-.17-1.111q-.812.125-1.66.125a11 11 0 0 1-1.66-.125"/></svg></span><span class="lb">signal</span><span>youngrub.67</span></div>
+    </div>
+    <div class="col">
+      <div class="r sh"><span class="b"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"><path d="M4 2H2v12h2"/><path d="M12 2h2v12h-2"/><path d="M6 8h4M8 6v4"/></svg></span><span>projects</span></div>
+      <div class="r"><span class="b">◆</span><a href="https://github.com/levpr1c/MediaVault" target="_blank">MediaVault</a><span class="m">сайт борда с тегами</span></div>
+      <div class="r"><span class="b">◆</span><a href="https://github.com/levpr1c/psychotests" target="_blank">psychotests</a><span class="m">психо тесты в терминале</span></div>
+      <div class="r"><span class="b">◆</span><a href="https://github.com/snowarch/iNiR/pull/29" target="_blank">iNiR PR</a><span class="m">iNir pull реквест</span></div>
+      <div class="r"><span class="b">◆</span><a href="https://github.com/deskflow/deskflow/pull/9171" target="_blank">deskflow</a><span class="m">русский перевод</span></div>
+    </div>
+  </div>
+</div>
 
 <script type="importmap">
 {
@@ -152,6 +209,7 @@ void main() {
 `;
 
 const fragmentShader = `
+uniform vec3 u_color;
 varying float v_value;
 
 void main() {
@@ -166,14 +224,43 @@ void main() {
   // Во впадинах точки не только маленькие, но и полупрозрачные
   float brightness = smoothstep(0.05, 0.5, v_value);
 
-  gl_FragColor = vec4(0.95, 0.95, 0.95, alpha * brightness);
+  gl_FragColor = vec4(u_color, alpha * brightness);
 }
 `;
+
+// Цвета из DESIGN.md: stone, accent, danger, success
+const DOT_DEFAULT = new THREE.Color(0.95, 0.95, 0.95);
+const DOT_TARGET = { value: DOT_DEFAULT.clone() };
+
+const rowColors = [
+  { match: 'MediaVault', color: new THREE.Color('#ff3b30') },   // danger
+  { match: 'psychotests', color: new THREE.Color('#ff3b30') },  // danger
+  { match: 'deskflow', color: new THREE.Color('#30d158') },     // success
+  { match: 'iNiR', color: new THREE.Color('#30d158') },        // success
+  { match: 'signal', color: new THREE.Color('#bf5af2') },       // purple
+  { match: 'matrix', color: new THREE.Color('#6e6e73') },       // stone
+  { match: 'discord', color: new THREE.Color('#6e6e73') },      // stone
+  { match: 'github', color: new THREE.Color('#6e6e73') },       // stone
+  { match: 'telegram', color: new THREE.Color('#007aff') },     // accent
+  { match: 'openvk', color: new THREE.Color('#007aff') },       // accent
+];
+
+document.querySelectorAll('.r').forEach(row => {
+  row.addEventListener('mouseenter', () => {
+    const text = row.textContent.toLowerCase();
+    const found = rowColors.find(r => text.includes(r.match.toLowerCase()));
+    if (found) DOT_TARGET.value.copy(found.color);
+  });
+  row.addEventListener('mouseleave', () => {
+    DOT_TARGET.value.copy(DOT_DEFAULT);
+  });
+});
 
 const mat = new THREE.ShaderMaterial({
   uniforms: {
     u_time: { value: 0 },
-    u_pixel_ratio: { value: pixelRatio }
+    u_pixel_ratio: { value: pixelRatio },
+    u_color: { value: DOT_DEFAULT.clone() }
   },
   vertexShader,
   fragmentShader,
@@ -201,6 +288,7 @@ function animate(time) {
   if (!running) return;
   requestAnimationFrame(animate);
   mat.uniforms.u_time.value = time;
+  mat.uniforms.u_color.value.lerp(DOT_TARGET.value, 0.03);
   renderer.render(scene, camera);
 }
 
