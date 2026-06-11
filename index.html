@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BG — 2D Halftone Wave</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+#c { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<div id="c"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const w = window.innerWidth;
+const h = window.innerHeight;
+
+const container = document.getElementById('c');
+const scene = new THREE.Scene();
+
+// Возвращаем Ортографическую камеру для абсолютно плоского 2D
+const camera = new THREE.OrthographicCamera(-w/2, w/2, h/2, -h/2, -1000, 1000);
+
+const renderer = new THREE.WebGLRenderer({ alpha: false, antialias: true, powerPreference: 'high-performance' });
+renderer.setSize(w, h);
+const pixelRatio = Math.min(window.devicePixelRatio, 1.5);
+renderer.setPixelRatio(pixelRatio);
+renderer.setClearColor(0x010101); // Почти черный, как на фото
+container.appendChild(renderer.domElement);
+
+// Настройки сетки
+const SPACING = 14; // Расстояние между точками
+const extent = Math.max(w, h) * 1.5; // Делаем с запасом, чтобы при вращении не было пустых углов
+const cols = Math.ceil(extent * 2 / SPACING);
+const rows = Math.ceil(extent * 2 / SPACING);
+const NUM = cols * rows;
+
+const pos = new Float32Array(NUM * 3);
+let idx = 0;
+for (let r = 0; r < rows; r++) {
+  for (let c = 0; c < cols; c++) {
+    pos[idx*3] = c * SPACING - extent;
+    pos[idx*3+1] = r * SPACING - extent;
+    pos[idx*3+2] = 0; // Строго 0 по Z
+    idx++;
+  }
+}
+
+const geo = new THREE.BufferGeometry();
+geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+const vertexShader = `
+uniform float u_time;
+uniform float u_pixel_ratio;
+varying float v_value;
+
+// Классический алгоритм 3D Simplex Noise
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+float snoise(vec3 v) {
+  const vec2  C = vec2(1.0/6.0, 1.0/3.0);
+  const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+  vec3 i  = floor(v + dot(v, C.yyy));
+  vec3 x0 = v - i + dot(i, C.xxx);
+  vec3 g = step(x0.yzx, x0.xyz);
+  vec3 l = 1.0 - g;
+  vec3 i1 = min(g.xyz, l.zxy);
+  vec3 i2 = max(g.xyz, l.zxy);
+  vec3 x1 = x0 - i1 + C.xxx;
+  vec3 x2 = x0 - i2 + C.yyy;
+  vec3 x3 = x0 - D.yyy;
+  i = mod289(i);
+  vec4 p = permute(permute(permute(
+             i.z + vec4(0.0, i1.z, i2.z, 1.0))
+           + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+           + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+  float n_ = 0.142857142857;
+  vec3  ns = n_ * D.wyz - D.xzx;
+  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+  vec4 x_ = floor(j * ns.z);
+  vec4 y_ = floor(j - 7.0 * x_ );
+  vec4 x = x_*ns.x + ns.yyyy;
+  vec4 y = y_*ns.x + ns.yyyy;
+  vec4 h = 1.0 - abs(x) - abs(y);
+  vec4 b0 = vec4(x.xy, y.xy);
+  vec4 b1 = vec4(x.zw, y.zw);
+  vec4 s0 = floor(b0)*2.0 + 1.0;
+  vec4 s1 = floor(b1)*2.0 + 1.0;
+  vec4 sh = -step(h, vec4(0.0));
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+  vec3 p0 = vec3(a0.xy,h.x);
+  vec3 p1 = vec3(a0.zw,h.y);
+  vec3 p2 = vec3(a1.xy,h.z);
+  vec3 p3 = vec3(a1.zw,h.w);
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+  vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+  m = m * m;
+  return 105.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+}
+
+void main() {
+  vec3 p = position;
+  float t = u_time * 0.0003;
+
+  // Масштаб волн
+  float freq1 = 0.0015;
+  float freq2 = 0.003;
+
+  // Генерируем два слоя шума для более сложных и естественных разводов
+  float n1 = snoise(vec3(p.x * freq1, p.y * freq1, t));
+  float n2 = snoise(vec3(p.x * freq2 - t * 0.5, p.y * freq2 + t * 0.5, t * 1.5));
+  
+  // Комбинируем и нормализуем (от 0 до 1)
+  float noiseValue = (n1 + n2 * 0.5) * 0.66;
+  noiseValue = noiseValue * 0.5 + 0.5;
+
+  // Контрастность: делаем темные участки темнее, а светлые - ярче
+  v_value = smoothstep(0.15, 0.85, noiseValue);
+
+  // Размер точки зависит только от шума. Минимальный размер - пылинка, максимальный - сливается в пятно
+  float size = 0.5 + v_value * 12.0;
+
+  gl_PointSize = size * u_pixel_ratio;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); // Z не трогаем, всё плоское!
+}
+`;
+
+const fragmentShader = `
+varying float v_value;
+
+void main() {
+  // Вырезаем круг
+  vec2 c = gl_PointCoord - 0.5;
+  float dist = length(c);
+  if (dist > 0.5) discard;
+
+  // Антиалиасинг краев точки
+  float alpha = smoothstep(0.5, 0.4, dist);
+
+  // Во впадинах точки не только маленькие, но и полупрозрачные
+  float brightness = smoothstep(0.05, 0.5, v_value);
+
+  gl_FragColor = vec4(0.95, 0.95, 0.95, alpha * brightness);
+}
+`;
+
+const mat = new THREE.ShaderMaterial({
+  uniforms: {
+    u_time: { value: 0 },
+    u_pixel_ratio: { value: pixelRatio }
+  },
+  vertexShader,
+  fragmentShader,
+  transparent: true,
+  depthWrite: false,
+});
+
+const sys = new THREE.Points(geo, mat);
+// Вращаем саму сетку, чтобы точки шли под углом (как на оригинальном фото)
+sys.rotation.z = Math.PI / 6; 
+scene.add(sys);
+
+window.addEventListener('resize', () => {
+  const ww = window.innerWidth, hh = window.innerHeight;
+  camera.left = -ww/2; 
+  camera.right = ww/2;
+  camera.top = hh/2; 
+  camera.bottom = -hh/2;
+  camera.updateProjectionMatrix();
+  renderer.setSize(ww, hh);
+});
+
+let running = true;
+function animate(time) {
+  if (!running) return;
+  requestAnimationFrame(animate);
+  mat.uniforms.u_time.value = time;
+  renderer.render(scene, camera);
+}
+
+window.addEventListener('beforeunload', () => { running = false; });
+
+animate(0);
+</script>
+</body>
+</html>
+
