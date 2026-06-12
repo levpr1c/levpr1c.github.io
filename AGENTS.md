@@ -24,6 +24,18 @@ No build system, no tests, no CI, no dependencies to install.
 - Points grid rotated `PI/6` for diagonal composition.
 - No external assets, no backend, no routing.
 
+## Blog
+
+- Posts live in `blog/posts/` as `.md` files.
+- To add a post:
+  1. Create `blog/posts/<slug>.md`
+  2. Run `bash blog/gen-posts.sh` to regenerate `blog/posts.json`
+- First line of `.md` file MUST be `# Title` (used as post title).
+- Metadata (title, date) is extracted from the `.md` file by gen-posts.sh.
+- Images in markdown use relative paths: `![alt](photos/file.png)` — renderer prepends `blog/posts/`.
+- `{ breaks: true }` in marked — single newlines render as `<br>`.
+- Posts are sorted newest-first (by file mtime).
+
 ## Quirks
 
 - `powerPreference: 'high-performance'` forced in WebGL context.
