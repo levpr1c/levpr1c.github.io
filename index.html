@@ -363,7 +363,10 @@ const views = document.getElementById('views');
 const pEl = document.getElementById('p');
 
 const mainH = () => mainView.offsetHeight + 'px';
-const blogH = () => Math.min(blogView.scrollHeight, window.innerHeight * 0.65 - 117) + 'px';
+const blogH = () => {
+  const maxH = window.innerWidth <= 640 ? window.innerHeight * 0.95 - 117 : window.innerHeight * 0.78 - 117;
+  return Math.min(blogView.scrollHeight, maxH) + 'px';
+};
 views.style.height = mainH();
 
 const MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
@@ -418,7 +421,7 @@ function hideBlog() {
   blogView.classList.remove('active');
   mainView.classList.remove('hidden');
   titleEl.classList.remove('blog');
-  requestAnimationFrame(() => { views.style.height = mainH(); });
+  views.style.height = mainH();
 }
 
 document.querySelectorAll('.blog-side').forEach(el => el.addEventListener('click', loadBlog));
